@@ -24,7 +24,7 @@ To run this program you need to have the following installed on your system:
 To build this code, run the following commands:
 ```
 cd ~
-git clone https://github.com/anirudhtopiwala/OpenSource_Problems.git
+git clone [https://github.com/JonasLos/OpenSource_Problems.git]
 cd ~/OpenSource_Problems/Spherical_View_Projection/
 mkdir build
 cd build
@@ -39,20 +39,5 @@ To run the node
 ```
 This wil show you the the spherical projection image formed from test_cloud.pcd present in the assests folder. To run your own file make sure to set the path correctly in the main() function.
 
-## Generating Doxygen Documentation
-
-To install doxygen run the following command:
-```
-sudo apt install doxygen
-```
-Now, to generate doxygen documentation, run the following commands:
-```
-cd ~/OpenSource_Problems/Spherical_View_Projection/
-doxygen doxy_config
-```
-Doxygen files will be generated to /docs folder. To view them in a browser, run the following commands:
-```
-cd docs/html
-firefox index.html
 ```
 
