@@ -21,11 +21,13 @@
 #include <opencv2/opencv.hpp>  // For visualizing image
 #include <vector>
 
+#include <iostream>
+
 SphericalConversion::SphericalConversion(const Configuration& config)
-    : config_(config) {
-    spherical_img_.assign(config_.num_lasers,
+: config_(config) {
+    spherical_img_.assign(64,
                           std::vector<std::vector<double>>(
-                              config_.img_length, std::vector<double>(5, 0.0)));
+                              1024, std::vector<double>(5, 0.0))); // 64 is number of lasers, 1024 is best image length
     cloud_ = pcl::PointCloud<pcl::PointXYZI>::Ptr(
         new pcl::PointCloud<pcl::PointXYZI>);
 };
@@ -40,8 +42,8 @@ int SphericalConversion::LoadCloud(const std::string& path) {
 }
 int SphericalConversion::MakeImage() {
     // Converting to Radians
-    double fov_up_rad = (config_.fov_up / 180) * M_PI;
-    double fov_down_rad = (config_.fov_down / 180) * M_PI;
+    double fov_up_rad = (2 / 180) * M_PI;
+    double fov_down_rad = (-24.8 / 180) * M_PI;
     // Getting total Field of View
     double fov_rad = std::abs(fov_up_rad) + std::abs(fov_down_rad);
     if (cloud_->size() == 0) {
@@ -74,21 +76,22 @@ void SphericalConversion::GetProjection(const pcl::PointXYZI& point,
     double v = 0.5 * (yaw / M_PI + 1.0);
     double u = 1.0 - (pitch + std::abs(fov_down_rad)) / fov_rad;
     // Scaling as per the lidar config given
-    v *= config_.img_length;
-    u *= config_.num_lasers;
+    v *= 1024; //best image length
+    u *= 64; // number of lasers
     // round and clamp for use as index
-    v = floor(v);
-    v = std::min(config_.img_length - 1, v);
+
+    v = std::min(1024 - 1, int(floor(v)));
     v = std::max(0.0, v);
     *pixel_v = int(v);
 
-    u = floor(u);
-    u = std::min(config_.num_lasers - 1, u);
+    u = std::min(64 - 1, int(floor(u)));
     u = std::max(0.0, u);
     *pixel_u = int(u);
 }
 
-auto SphericalConversion::GetImg() const { return spherical_img_; }
+ std::vector<std::vector<std::vector<double>>> SphericalConversion::GetImg() const {
+ return spherical_img_; 
+}
 
 void SphericalConversion::ShowImg(
     const std::vector<std::vector<std::vector<double>>>& img) const {
@@ -109,7 +112,7 @@ int main() {
      * Num of Lasers = 64
      * Best length of image comes out to be = 1024
      */
-    const Configuration config_input{2, -24.8, 64, 1024};
+    const Configuration config_input; //had to change this so now the parameters are hard coded into the functions
     const std::string path =
         "/home/" + std::string(getenv("USER")) +
         "/OpenSource_Problems/Spherical_View_Projection/assests/"
@@ -118,6 +121,7 @@ int main() {
     SphericalConversion conv(config_input);
     conv.LoadCloud(path);
     conv.MakeImage();
+    //std::vector<std::vector<std::vector<double>>>
     auto img = conv.GetImg();
     conv.ShowImg(img);
 }
