@@ -24,7 +24,7 @@ To run this program you need to have the following installed on your system:
 To build this code, run the following commands:
 ```
 cd ~
-git clone [https://github.com/JonasLos/OpenSource_Problems.git]
+git clone https://github.com/JonasLos/OpenSource_Problems.git
 cd ~/OpenSource_Problems/Spherical_View_Projection/
 mkdir build
 cd build
