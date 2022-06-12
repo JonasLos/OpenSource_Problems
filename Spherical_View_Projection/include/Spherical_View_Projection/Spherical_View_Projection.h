@@ -3,7 +3,7 @@
  * Copyright (c) 2020 Anirudh Topiwala
  * Author: Anirudh Topiwala
  * Create Date: 2020-03
- * Last Edit Date: 2020-03
+ * Last Edit Date: 2022-06
  *
  * @brief This class is used to load a point cloud using pcl and convert it into
  * spherical view or front view projection. More information about the theory
@@ -92,7 +92,9 @@ class SphericalConversion {
    *
    * @return auto
    */
-  auto GetImg() const;
+   std::vector<std::vector<std::vector<double>>> GetImg() const;
+   //auto GetImg() const;
+
   /**
    * @brief Use OpenCv to view the spherical image formed
    *
